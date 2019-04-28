@@ -285,5 +285,51 @@ module.exports = {
     'flowtype/define-flow-type': 'warn',
     'flowtype/require-valid-file-annotation': 'warn',
     'flowtype/use-flow-type': 'warn',
+
+    // custom
+    'jsx-a11y/href-no-hash': 'off',
+    'react/react-in-jsx-scope': 'off',
+    'no-console': 'off',
+    'import/no-cycle': 'off',
+    'import/prefer-default-export': ['warn'],
+    'comma-dangle': [
+      'error',
+      {
+        arrays: 'always-multiline',
+        objects: 'always-multiline',
+        imports: 'always-multiline',
+        exports: 'always-multiline',
+        functions: 'never',
+      },
+    ],
+    'no-underscore-dangle': [
+      'error',
+      {
+        allowAfterThis: true,
+        allow: ['_namespace', '_db'],
+      },
+    ],
+    'no-param-reassign': [
+      'error',
+      {
+        props: true,
+        ignorePropertyModificationsFor: ['app'],
+      },
+    ],
+    semi: ['error', 'always'],
+    quotes: ['error', 'double'],
+    // "max-len": ["error", {
+    //   "code": 100,
+    //   "tabWidth": 2,
+    //   "ignoreComments": true
+    // }]
+    'quote-props': ['error', 'as-needed'],
+    curly: ['error'],
+    'brace-style': ['error', '1tbs'],
+    'no-var': 'error',
+    'object-shorthand': 'error',
+    'prefer-arrow-callback': 'error',
+    'prefer-const': 'error',
+    'prefer-destructuring': ['error', { array: true, object: true }],
   },
 };

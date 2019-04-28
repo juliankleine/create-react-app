@@ -103,7 +103,7 @@ module.exports = function(
 
   // Setup the eslint config
   appPackage.eslintConfig = {
-    extends: 'react-app',
+    extends: 'jk-react-app',
   };
 
   // Setup the browsers list
@@ -256,6 +256,7 @@ module.exports = function(
   }
   console.log();
   console.log('Happy hacking!');
+  console.log('Welcome to CLOUDPILOTS!');
 };
 
 function isReactInstalled(appPackage) {

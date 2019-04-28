@@ -16,7 +16,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          Show the world how awesome CLOUDPILOTS is
         </a>
       </header>
     </div>
