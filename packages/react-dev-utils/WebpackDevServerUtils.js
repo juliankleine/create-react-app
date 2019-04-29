@@ -83,21 +83,13 @@ function printInstructions(appName, urls, useYarn) {
 
   if (urls.lanUrlForTerminal) {
     console.log(
-      `  ${chalk.bold('Local:')}            ${urls.localUrlForTerminal}`
-    );
-    console.log(
-      `  ${chalk.bold('On Your Network:')}  ${urls.lanUrlForTerminal}`
+      `${chalk.green('Frontend')} started on port ${chalk.yellow(
+        '3000'
+      )}.\n\n  $${chalk.bold('Local:')}  ${urls.localUrlForTerminal}`
     );
   } else {
     console.log(`  ${urls.localUrlForTerminal}`);
   }
-
-  console.log();
-  console.log('Note that the development build is not optimized.');
-  console.log(
-    `To create a production build, use ` +
-      `${chalk.cyan(`${useYarn ? 'yarn' : 'npm run'} build`)}.`
-  );
   console.log();
 }
 

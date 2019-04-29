@@ -255,7 +255,7 @@ module.exports = function(
     );
   }
   console.log();
-  console.log('Welcome to CLOUDPILOTS!');
+  console.log(`Welcome to ${chalk.blue('CLOUDPILOTS')}!`);
 };
 
 function isReactInstalled(appPackage) {
