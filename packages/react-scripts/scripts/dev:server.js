@@ -100,14 +100,16 @@ choosePort(HOST, DEFAULT_PORT)
     const { exec } = require('child_process');
 
     exec(
-      'NODE_ENV=production npx babel src/server -s -D -d dist --copy-files',
+      "NODE_ENV=development npx nodemon --watch src/server --watch config --exec 'npx babel-node src/server/index.js'",
       (err, stdout, stderr) => {
         if (err) {
           console.error(`exec error: ${err}`);
+          devServer.close();
+          process.exit();
           return;
         }
 
-        console.log(`Build server: ${stdout}`);
+        console.log(`${stdout}`);
       }
     );
 

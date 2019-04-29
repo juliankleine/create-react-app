@@ -150,6 +150,22 @@ function build(previousFileSizes) {
 
   console.log('Creating an optimized production build...');
 
+  const { exec } = require('child_process');
+
+  exec(
+    'NODE_ENV=production npx babel src/server -s -D -d dist --copy-files',
+    (err, stdout, stderr) => {
+      if (err) {
+        console.error(`exec error: ${err}`);
+        devServer.close();
+        process.exit();
+        return;
+      }
+
+      console.log(`Compiled server | ${stdout}`);
+    }
+  );
+
   const compiler = webpack(config);
   return new Promise((resolve, reject) => {
     compiler.run((err, stats) => {
