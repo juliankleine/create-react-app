@@ -1,6 +1,6 @@
 {
   "name": "jk-react-scripts",
-  "version": "3.0.5",
+  "version": "3.0.21",
   "description": "Custom Configuration and scripts for Create React App.",
   "repository": {
     "type": "git",
@@ -28,7 +28,13 @@
   },
   "types": "./lib/react-app.d.ts",
   "dependencies": {
+    "@babel/cli": "^7.4.4",
     "@babel/core": "7.4.3",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-react": "^7.0.0",
     "@svgr/webpack": "4.1.0",
     "@typescript-eslint/eslint-plugin": "1.6.0",
     "@typescript-eslint/parser": "1.6.0",
