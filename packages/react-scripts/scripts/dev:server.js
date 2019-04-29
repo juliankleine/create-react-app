@@ -33,96 +33,52 @@ verifyTypeScriptSetup();
 
 const fs = require('fs');
 const chalk = require('react-dev-utils/chalk');
-const webpack = require('webpack');
-const WebpackDevServer = require('webpack-dev-server');
 const clearConsole = require('react-dev-utils/clearConsole');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
-const {
-  choosePort,
-  createCompiler,
-  prepareProxy,
-  prepareUrls,
-} = require('react-dev-utils/WebpackDevServerUtils');
-const openBrowser = require('react-dev-utils/openBrowser');
+const { choosePort } = require('react-dev-utils/WebpackDevServerUtils');
+const nodemon = require('nodemon');
 const paths = require('../config/paths');
-const configFactory = require('../config/webpack.config');
-const createDevServerConfig = require('../config/webpackDevServer.config');
 
-const useYarn = fs.existsSync(paths.yarnLockFile);
 const isInteractive = process.stdout.isTTY;
 
 // Warn and crash if required files are missing
-if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
+if (!checkRequiredFiles([paths.serverIndexJs])) {
   process.exit(1);
 }
 
-// Tools like Cloud9 rely on this.
-const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 8080;
-const HOST = process.env.HOST || '0.0.0.0';
+console.log(chalk.cyan('Starting the backend server...\n'));
 
-if (process.env.HOST) {
-  console.log(
-    chalk.cyan(
-      `Attempting to bind to HOST environment variable: ${chalk.yellow(
-        chalk.bold(process.env.HOST)
-      )}`
-    )
-  );
-  console.log(
-    "If this was unintentional, check that you haven't mistakenly set it in your shell."
-  );
-  console.log(
-    `Learn more here: ${chalk.yellow('https://bit.ly/CRA-advanced-config')}`
-  );
-  console.log();
-}
+const babelConfig = paths.ownPath + '/config/babel.config.js';
 
-choosePort(HOST, DEFAULT_PORT)
-  .then(port => {
-    if (port == null) {
-      // We have not found a port.
-      return;
+nodemon({
+  script: 'src/server/index.js',
+  watch: ['src/server'],
+  execMap: {
+    js: `npx babel-node --config-file ${babelConfig}`,
+  },
+  env: {
+    NODE_ENV: 'development',
+  },
+});
+
+nodemon
+  .on('start', function() {
+    if (isInteractive) {
+      clearConsole();
     }
-    const config = configFactory('development');
-    const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
-    const appName = require(paths.appPackageJson).name;
-    const useTypeScript = fs.existsSync(paths.appTsConfig);
-    const urls = prepareUrls(protocol, HOST, port);
-    const devSocket = {
-      warnings: warnings =>
-        devServer.sockWrite(devServer.sockets, 'warnings', warnings),
-      errors: errors =>
-        devServer.sockWrite(devServer.sockets, 'errors', errors),
-    };
-
-    console.log('not sure what next');
-
-    const { exec } = require('child_process');
-
-    exec(
-      "NODE_ENV=development npx nodemon --watch src/server --watch config --exec 'npx babel-node src/server/index.js'",
-      (err, stdout, stderr) => {
-        if (err) {
-          console.error(`exec error: ${err}`);
-          devServer.close();
-          process.exit();
-          return;
-        }
-
-        console.log(`${stdout}`);
-      }
+    console.log(
+      `${chalk.green('Server')} started on port ${chalk.yellow('8080')}.\n`
     );
-
-    ['SIGINT', 'SIGTERM'].forEach(function(sig) {
-      process.on(sig, function() {
-        devServer.close();
-        process.exit();
-      });
-    });
   })
-  .catch(err => {
-    if (err && err.message) {
-      console.log(err.message);
-    }
-    process.exit(1);
+  .on('message', function(event) {
+    console.log('got message event', event);
+  })
+  .on('crash', function() {
+    console.log(chalk.red('Server crashed for some reason'));
   });
+
+['SIGINT', 'SIGTERM', nodemon].forEach(function(sig) {
+  process.on(sig, function() {
+    process.exit();
+  });
+});
