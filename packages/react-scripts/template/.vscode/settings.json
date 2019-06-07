@@ -1,0 +1,32 @@
+{
+  "editor.rulers": [
+    80
+    // 99
+  ],
+  "javascript.format.enable": false,
+  "eslint.autoFixOnSave": true,
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "files.associations": {
+    "*.js": "javascriptreact",
+    "*.jsx": "javascriptreact"
+  },
+  "eslint.packageManager": "npm",
+  "npm.packageManager": "npm",
+  "prettier.eslintIntegration": true,
+  "atlascode.jira.workingSite": {
+    "id": "fda15e98-f993-4d1d-a3c4-9fc18430ba80",
+    "name": "cloudpilots",
+    "scopes": [
+      "manage:jira-project",
+      "write:jira-work",
+      "read:jira-work",
+      "read:jira-user"
+    ],
+    "avatarUrl": "https://site-admin-avatar-cdn.prod.public.atl-paas.net/avatars/240/rocket.png",
+    "baseUrlSuffix": "atlassian.net"
+  }
+}
