@@ -1,6 +1,6 @@
 {
   "name": "@cloudpilots/react-scripts",
-  "version": "3.0.8",
+  "version": "3.0.9",
   "description": "Custom Configuration and scripts for Create React App.",
   "repository": {
     "type": "git",
@@ -35,6 +35,7 @@
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/preset-env": "^7.4.4",
     "@babel/preset-react": "^7.0.0",
+    "@cloudpilots/eslint-config-react-app": "^4.0.1",
     "@svgr/webpack": "4.1.0",
     "@typescript-eslint/eslint-plugin": "1.6.0",
     "@typescript-eslint/parser": "1.6.0",
@@ -48,7 +49,6 @@
     "css-loader": "2.1.1",
     "dotenv": "6.2.0",
     "dotenv-expand": "4.2.0",
-    "eslint-config-jk-react-app": "^4.0.1",
     "eslint-config-react-app": "^4.0.0",
     "eslint-loader": "2.1.2",
     "eslint-plugin-flowtype": "2.50.1",
