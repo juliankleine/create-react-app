@@ -1,3 +1,5 @@
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable global-require */
 // @remove-file-on-eject
 /**
  * Copyright (c) 2015-present, Facebook, Inc.

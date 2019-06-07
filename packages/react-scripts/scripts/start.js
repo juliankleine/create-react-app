@@ -1,3 +1,6 @@
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable global-require */
+/* eslint-disable import/order */
 // @remove-on-eject-begin
 /**
  * Copyright (c) 2015-present, Facebook, Inc.

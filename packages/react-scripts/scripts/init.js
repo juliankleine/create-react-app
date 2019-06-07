@@ -1,3 +1,5 @@
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable global-require */
 // @remove-file-on-eject
 /**
  * Copyright (c) 2015-present, Facebook, Inc.
@@ -74,6 +76,7 @@ function tryGitInit(appPath) {
   }
 }
 
+// eslint-disable-next-line func-names
 module.exports = function(
   appPath,
   appName,
@@ -102,7 +105,7 @@ module.exports = function(
 
   // Setup the eslint config
   appPackage.eslintConfig = {
-    extends: 'jk-react-app',
+    extends: 'cpl-react-app',
   };
 
   // Setup the browsers list
