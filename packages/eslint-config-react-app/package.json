@@ -1,6 +1,6 @@
 {
   "name": "@cloudpilots/eslint-config-react-app",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "CLOUDPILOTS ESLint configuration used by Create React App",
   "repository": {
     "type": "git",
