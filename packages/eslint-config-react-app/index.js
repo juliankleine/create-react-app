@@ -314,7 +314,7 @@ module.exports = {
       },
     ],
     semi: ['error', 'always'],
-    quotes: ['error', 'double'],
+    quotes: ['error', 'single'],
     // "max-len": ["error", {
     //   "code": 100,
     //   "tabWidth": 2,

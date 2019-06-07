@@ -36,6 +36,8 @@ function verifyPackageTree() {
   // Gather wanted deps
   depsToCheck.forEach(dep => {
     const expectedVersion = ownPackageJson.dependencies[dep];
+    console.log('expected verison', expectedVersion);
+
     if (!expectedVersion) {
       throw new Error('This dependency list is outdated, fix it.');
     }
