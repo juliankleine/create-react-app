@@ -288,7 +288,6 @@ module.exports = {
 
     // custom
     'jsx-a11y/href-no-hash': 'off',
-    'react/react-in-jsx-scope': 'off',
     'no-console': 'off',
     'import/no-cycle': 'off',
     'import/prefer-default-export': ['warn'],
@@ -331,5 +330,41 @@ module.exports = {
     'prefer-arrow-callback': 'error',
     'prefer-const': 'error',
     'prefer-destructuring': ['error', { array: true, object: true }],
+
+    'react/destructuring-assignment': [
+      2,
+      'always',
+      { ignoreClassFields: true },
+    ],
+    // It's buggy
+    'react/forbid-prop-types': 'off',
+    'react/jsx-curly-brace-presence': 'off',
+    'react/jsx-filename-extension': ['error', { extensions: ['.js'] }], // airbnb is using .jsx
+    'react/jsx-handler-names': [
+      'error',
+      {
+        // airbnb is disabling this rule
+        eventHandlerPrefix: 'on',
+        eventHandlerPropPrefix: 'on',
+      },
+    ],
+    'react/no-danger': 'error',
+    // Strict, airbnb is using off
+    'react/no-find-dom-node': 'off',
+    'react/no-multi-comp': 'off',
+    'react/require-default-props': 'off',
+    'react/sort-prop-types': 'error',
+
+    'import/no-extraneous-dependencies': 'off', // It would be better to enable this rule.
+    'import/namespace': ['error', { allowComputed: true }],
+    'import/order': [
+      'error',
+      {
+        groups: [
+          ['index', 'sibling', 'parent', 'internal', 'external', 'builtin'],
+        ],
+        'newlines-between': 'never',
+      },
+    ],
   },
 };

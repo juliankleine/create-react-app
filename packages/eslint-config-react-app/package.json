@@ -1,7 +1,7 @@
 {
-  "name": "eslint-config-jk-react-app",
-  "version": "4.0.0",
-  "description": "JK ESLint configuration used by Create React App",
+  "name": "eslint-config-cpl-react-app",
+  "version": "4.0.3",
+  "description": "CLOUDPILOTS ESLint configuration used by Create React App",
   "repository": {
     "type": "git",
     "url": "https://github.com/juliankleine/create-react-app.git",
