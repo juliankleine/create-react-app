@@ -1,6 +1,6 @@
 {
   "name": "@cloudpilots/react-scripts",
-  "version": "3.0.37",
+  "version": "3.0.7",
   "description": "Custom Configuration and scripts for Create React App.",
   "repository": {
     "type": "git",
@@ -89,6 +89,7 @@
     "workbox-webpack-plugin": "4.2.0"
   },
   "devDependencies": {
+    "express": "^4.17.1",
     "react": "^16.8.4",
     "react-dom": "^16.8.4"
   },
