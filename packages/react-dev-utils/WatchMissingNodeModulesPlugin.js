@@ -9,8 +9,6 @@
 // We’re not sure why this isn't Webpack's default behavior.
 // See https://github.com/facebook/create-react-app/issues/186.
 
-'use strict';
-
 class WatchMissingNodeModulesPlugin {
   constructor(nodeModulesPath) {
     this.nodeModulesPath = nodeModulesPath;
@@ -18,8 +16,8 @@ class WatchMissingNodeModulesPlugin {
 
   apply(compiler) {
     compiler.hooks.emit.tap('WatchMissingNodeModulesPlugin', compilation => {
-      var missingDeps = Array.from(compilation.missingDependencies);
-      var nodeModulesPath = this.nodeModulesPath;
+      const missingDeps = Array.from(compilation.missingDependencies);
+      const { nodeModulesPath } = this;
 
       // If any missing files are expected to appear in node_modules...
       if (missingDeps.some(file => file.includes(nodeModulesPath))) {

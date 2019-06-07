@@ -4,7 +4,6 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-'use strict';
 
 const fs = require('fs');
 const path = require('path');
@@ -128,20 +127,20 @@ function getArgumentsForLineNumber(
     case 'subl':
     case 'sublime':
     case 'sublime_text':
-      return [fileName + ':' + lineNumber + ':' + colNumber];
+      return [`${fileName}:${lineNumber}:${colNumber}`];
     case 'wstorm':
     case 'charm':
-      return [fileName + ':' + lineNumber];
+      return [`${fileName}:${lineNumber}`];
     case 'notepad++':
-      return ['-n' + lineNumber, '-c' + colNumber, fileName];
+      return [`-n${lineNumber}`, `-c${colNumber}`, fileName];
     case 'vim':
     case 'mvim':
     case 'joe':
     case 'gvim':
-      return ['+' + lineNumber, fileName];
+      return [`+${lineNumber}`, fileName];
     case 'emacs':
     case 'emacsclient':
-      return ['+' + lineNumber + ':' + colNumber, fileName];
+      return [`+${lineNumber}:${colNumber}`, fileName];
     case 'rmate':
     case 'mate':
     case 'mine':
@@ -151,7 +150,7 @@ function getArgumentsForLineNumber(
     case 'code-insiders':
     case 'Code - Insiders':
       return addWorkspaceToArgumentsIfExists(
-        ['-g', fileName + ':' + lineNumber + ':' + colNumber],
+        ['-g', `${fileName}:${lineNumber}:${colNumber}`],
         workspace
       );
     case 'appcode':
@@ -238,7 +237,8 @@ function guessEditor() {
   // Last resort, use old skool env vars
   if (process.env.VISUAL) {
     return [process.env.VISUAL];
-  } else if (process.env.EDITOR) {
+  }
+  if (process.env.EDITOR) {
     return [process.env.EDITOR];
   }
 
@@ -248,25 +248,24 @@ function guessEditor() {
 function printInstructions(fileName, errorMessage) {
   console.log();
   console.log(
-    chalk.red('Could not open ' + path.basename(fileName) + ' in the editor.')
+    chalk.red(`Could not open ${path.basename(fileName)} in the editor.`)
   );
   if (errorMessage) {
     if (errorMessage[errorMessage.length - 1] !== '.') {
       errorMessage += '.';
     }
     console.log(
-      chalk.red('The editor process exited with an error: ' + errorMessage)
+      chalk.red(`The editor process exited with an error: ${errorMessage}`)
     );
   }
   console.log();
   console.log(
-    'To set up the editor integration, add something like ' +
-      chalk.cyan('REACT_EDITOR=atom') +
-      ' to the ' +
-      chalk.green('.env.local') +
-      ' file in your project folder ' +
-      'and restart the development server. Learn more: ' +
-      chalk.green('https://goo.gl/MMTaZt')
+    `To set up the editor integration, add something like ${chalk.cyan(
+      'REACT_EDITOR=atom'
+    )} to the ${chalk.green('.env.local')} file in your project folder ` +
+      `and restart the development server. Learn more: ${chalk.green(
+        'https://goo.gl/MMTaZt'
+      )}`
   );
   console.log();
 }
@@ -325,7 +324,7 @@ function launchEditor(fileName, lineNumber, colNumber) {
   ) {
     console.log();
     console.log(
-      chalk.red('Could not open ' + path.basename(fileName) + ' in the editor.')
+      chalk.red(`Could not open ${path.basename(fileName)} in the editor.`)
     );
     console.log();
     console.log(
@@ -338,7 +337,7 @@ function launchEditor(fileName, lineNumber, colNumber) {
     return;
   }
 
-  let workspace = null;
+  const workspace = null;
   if (lineNumber) {
     args = args.concat(
       getArgumentsForLineNumber(
@@ -371,15 +370,15 @@ function launchEditor(fileName, lineNumber, colNumber) {
   } else {
     _childProcess = child_process.spawn(editor, args, { stdio: 'inherit' });
   }
-  _childProcess.on('exit', function(errorCode) {
+  _childProcess.on('exit', errorCode => {
     _childProcess = null;
 
     if (errorCode) {
-      printInstructions(fileName, '(code ' + errorCode + ')');
+      printInstructions(fileName, `(code ${errorCode})`);
     }
   });
 
-  _childProcess.on('error', function(error) {
+  _childProcess.on('error', error => {
     printInstructions(fileName, error.message);
   });
 }

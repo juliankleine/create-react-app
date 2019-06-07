@@ -5,8 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
 const chalk = require('chalk');
 const path = require('path');
 const os = require('os');
@@ -65,20 +63,20 @@ class ModuleScopePlugin {
           })
         ) {
           const scopeError = new Error(
-            `You attempted to import ${chalk.cyan(
+            `${`You attempted to import ${chalk.cyan(
               request.__innerRequest_request
             )} which falls outside of the project ${chalk.cyan(
               'src/'
             )} directory. ` +
               `Relative imports outside of ${chalk.cyan(
                 'src/'
-              )} are not supported.` +
-              os.EOL +
-              `You can either move it inside ${chalk.cyan(
-                'src/'
-              )}, or add a symlink to it from project's ${chalk.cyan(
-                'node_modules/'
-              )}.`
+              )} are not supported.`}${
+              os.EOL
+            }You can either move it inside ${chalk.cyan(
+              'src/'
+            )}, or add a symlink to it from project's ${chalk.cyan(
+              'node_modules/'
+            )}.`
           );
           Object.defineProperty(scopeError, '__module_scope_plugin', {
             value: true,

@@ -5,8 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
 // This alternative WebpackDevServer combines the functionality of:
 // https://github.com/webpack/webpack-dev-server/blob/webpack-1/client/index.js
 // https://github.com/webpack/webpack/blob/webpack-1/hot/dev-server.js
@@ -16,23 +14,21 @@
 // that looks similar to our console output. The error overlay is inspired by:
 // https://github.com/glenjamin/webpack-hot-middleware
 
-var SockJS = require('sockjs-client');
-var stripAnsi = require('strip-ansi');
-var url = require('url');
-var launchEditorEndpoint = require('./launchEditorEndpoint');
-var formatWebpackMessages = require('./formatWebpackMessages');
-var ErrorOverlay = require('react-error-overlay');
+const SockJS = require('sockjs-client');
+const stripAnsi = require('strip-ansi');
+const url = require('url');
+const launchEditorEndpoint = require('./launchEditorEndpoint');
+const formatWebpackMessages = require('./formatWebpackMessages');
+const ErrorOverlay = require('react-error-overlay');
 
-ErrorOverlay.setEditorHandler(function editorHandler(errorLocation) {
+ErrorOverlay.setEditorHandler(errorLocation => {
   // Keep this sync with errorOverlayMiddleware.js
   fetch(
-    launchEditorEndpoint +
-      '?fileName=' +
-      window.encodeURIComponent(errorLocation.fileName) +
-      '&lineNumber=' +
-      window.encodeURIComponent(errorLocation.lineNumber || 1) +
-      '&colNumber=' +
-      window.encodeURIComponent(errorLocation.colNumber || 1)
+    `${launchEditorEndpoint}?fileName=${window.encodeURIComponent(
+      errorLocation.fileName
+    )}&lineNumber=${window.encodeURIComponent(
+      errorLocation.lineNumber || 1
+    )}&colNumber=${window.encodeURIComponent(errorLocation.colNumber || 1)}`
   );
 });
 
@@ -42,23 +38,23 @@ ErrorOverlay.setEditorHandler(function editorHandler(errorLocation) {
 // application. This is handled below when we are notified of a compile (code
 // change).
 // See https://github.com/facebook/create-react-app/issues/3096
-var hadRuntimeError = false;
+let hadRuntimeError = false;
 ErrorOverlay.startReportingRuntimeErrors({
-  onError: function() {
+  onError() {
     hadRuntimeError = true;
   },
   filename: '/static/js/bundle.js',
 });
 
 if (module.hot && typeof module.hot.dispose === 'function') {
-  module.hot.dispose(function() {
+  module.hot.dispose(() => {
     // TODO: why do we need this?
     ErrorOverlay.stopReportingRuntimeErrors();
   });
 }
 
 // Connect to WebpackDevServer via a socket.
-var connection = new SockJS(
+const connection = new SockJS(
   url.format({
     protocol: window.location.protocol,
     hostname: window.location.hostname,
@@ -80,9 +76,9 @@ connection.onclose = function() {
 };
 
 // Remember some state related to hot module replacement.
-var isFirstCompilation = true;
-var mostRecentCompilationHash = null;
-var hasCompileErrors = false;
+let isFirstCompilation = true;
+let mostRecentCompilationHash = null;
+let hasCompileErrors = false;
 
 function clearOutdatedErrors() {
   // Clean up outdated compile errors, if any.
@@ -97,13 +93,13 @@ function clearOutdatedErrors() {
 function handleSuccess() {
   clearOutdatedErrors();
 
-  var isHotUpdate = !isFirstCompilation;
+  const isHotUpdate = !isFirstCompilation;
   isFirstCompilation = false;
   hasCompileErrors = false;
 
   // Attempt to apply hot updates or reload.
   if (isHotUpdate) {
-    tryApplyUpdates(function onHotUpdateSuccess() {
+    tryApplyUpdates(() => {
       // Only dismiss it when we're sure it's a hot update.
       // Otherwise it would flicker right before the reload.
       tryDismissErrorOverlay();
@@ -115,19 +111,19 @@ function handleSuccess() {
 function handleWarnings(warnings) {
   clearOutdatedErrors();
 
-  var isHotUpdate = !isFirstCompilation;
+  const isHotUpdate = !isFirstCompilation;
   isFirstCompilation = false;
   hasCompileErrors = false;
 
   function printWarnings() {
     // Print warnings to the console.
-    var formatted = formatWebpackMessages({
-      warnings: warnings,
+    const formatted = formatWebpackMessages({
+      warnings,
       errors: [],
     });
 
     if (typeof console !== 'undefined' && typeof console.warn === 'function') {
-      for (var i = 0; i < formatted.warnings.length; i++) {
+      for (let i = 0; i < formatted.warnings.length; i++) {
         if (i === 5) {
           console.warn(
             'There were more warnings in other files.\n' +
@@ -144,7 +140,7 @@ function handleWarnings(warnings) {
 
   // Attempt to apply hot updates or reload.
   if (isHotUpdate) {
-    tryApplyUpdates(function onSuccessfulHotUpdate() {
+    tryApplyUpdates(() => {
       // Only dismiss it when we're sure it's a hot update.
       // Otherwise it would flicker right before the reload.
       tryDismissErrorOverlay();
@@ -160,8 +156,8 @@ function handleErrors(errors) {
   hasCompileErrors = true;
 
   // "Massage" webpack messages.
-  var formatted = formatWebpackMessages({
-    errors: errors,
+  const formatted = formatWebpackMessages({
+    errors,
     warnings: [],
   });
 
@@ -170,7 +166,7 @@ function handleErrors(errors) {
 
   // Also log them to the console.
   if (typeof console !== 'undefined' && typeof console.error === 'function') {
-    for (var i = 0; i < formatted.errors.length; i++) {
+    for (let i = 0; i < formatted.errors.length; i++) {
       console.error(stripAnsi(formatted.errors[i]));
     }
   }
@@ -193,7 +189,7 @@ function handleAvailableHash(hash) {
 
 // Handle messages from the server.
 connection.onmessage = function(e) {
-  var message = JSON.parse(e.data);
+  const message = JSON.parse(e.data);
   switch (message.type) {
     case 'hash':
       handleAvailableHash(message.data);
@@ -260,15 +256,15 @@ function tryApplyUpdates(onHotUpdateSuccess) {
   }
 
   // https://webpack.github.io/docs/hot-module-replacement.html#check
-  var result = module.hot.check(/* autoApply */ true, handleApplyUpdates);
+  const result = module.hot.check(/* autoApply */ true, handleApplyUpdates);
 
   // // Webpack 2 returns a Promise instead of invoking a callback
   if (result && result.then) {
     result.then(
-      function(updatedModules) {
+      updatedModules => {
         handleApplyUpdates(null, updatedModules);
       },
-      function(err) {
+      err => {
         handleApplyUpdates(err, null);
       }
     );

@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 // @remove-on-eject-begin
 /**
  * Copyright (c) 2015-present, Facebook, Inc.
@@ -6,7 +7,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 // @remove-on-eject-end
-'use strict';
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'development';
@@ -24,10 +24,12 @@ require('../config/env');
 // @remove-on-eject-begin
 // Do the preflight check (only happens before eject).
 const verifyPackageTree = require('./utils/verifyPackageTree');
+
 if (process.env.SKIP_PREFLIGHT_CHECK !== 'true') {
   verifyPackageTree();
 }
 const verifyTypeScriptSetup = require('./utils/verifyTypeScriptSetup');
+
 verifyTypeScriptSetup();
 // @remove-on-eject-end
 
@@ -48,7 +50,7 @@ if (!checkRequiredFiles([paths.serverIndexJs])) {
 
 console.log(chalk.cyan('Starting the backend server...\n'));
 
-const babelConfig = paths.ownPath + '/config/babel.config.js';
+const babelConfig = `${paths.ownPath}/config/babel.config.js`;
 
 nodemon({
   script: 'src/server/index.js',
@@ -62,7 +64,7 @@ nodemon({
 });
 
 nodemon
-  .on('start', function() {
+  .on('start', () => {
     if (isInteractive) {
       clearConsole();
     }
@@ -70,15 +72,15 @@ nodemon
       `${chalk.green('Server')} started on port ${chalk.yellow('8080')}.\n`
     );
   })
-  .on('message', function(event) {
+  .on('message', event => {
     console.log('got message event', event);
   })
-  .on('crash', function() {
+  .on('crash', () => {
     console.log(chalk.red('Server crashed for some reason'));
   });
 
-['SIGINT', 'SIGTERM', nodemon].forEach(function(sig) {
-  process.on(sig, function() {
+['SIGINT', 'SIGTERM', nodemon].forEach(sig => {
+  process.on(sig, () => {
     process.exit();
   });
 });

@@ -1,17 +1,114 @@
 {
-  "extends": "eslint:recommended",
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module",
+    "allowImportExportEverywhere": false,
+    "codeFrame": false,
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true,
+      "arrowFunctions": true,
+      "classes": true,
+      "commonjs": true
+    },
+    "ecmaVersion": 8
+  },
+  "extends": [
+    "plugin:import/recommended",
+    "airbnb",
+    "react-app",
+    "prettier",
+    "prettier/react",
+    "plugin:jest/recommended"
+  ],
+  "plugins": ["react", "react-hooks", "jest"],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx"]
+      }
+    },
+    "react": {
+      "version": "detect"
+    }
+  },
   "env": {
-    "browser": true,
-    "commonjs": true,
     "node": true,
     "es6": true
   },
-  "parserOptions": {
-    "ecmaVersion": 2018
-  },
   "rules": {
+    "jsx-a11y/href-no-hash": "off",
+    "react/react-in-jsx-scope": "off",
     "no-console": "off",
-    "strict": ["error", "global"],
-    "curly": "warn"
+    "import/no-cycle": "off",
+    "import/prefer-default-export": ["warn"],
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "always-multiline",
+        "objects": "always-multiline",
+        "imports": "always-multiline",
+        "exports": "always-multiline",
+        "functions": "never"
+      }
+    ],
+    "no-underscore-dangle": [
+      "error",
+      {
+        "allowAfterThis": true,
+        "allow": ["_namespace", "_db"]
+      }
+    ],
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": ["app"]
+      }
+    ],
+    "semi": ["error", "always"],
+    "quotes": ["error", "single"],
+    "quote-props": ["error", "as-needed"],
+    "curly": ["error"],
+    "brace-style": ["error", "1tbs"],
+    "no-var": "error",
+    "object-shorthand": "error",
+    "prefer-arrow-callback": "error",
+    "prefer-const": "error",
+    "prefer-destructuring": ["error", { "array": true, "object": true }],
+
+    "react/destructuring-assignment": "off",
+    "react/forbid-prop-types": "off",
+    "react/jsx-curly-brace-presence": "off",
+    "react/jsx-filename-extension": ["error", { "extensions": [".js"] }], // airbnb is using .jsx
+    "react/jsx-handler-names": [
+      "error",
+      {
+        "eventHandlerPrefix": "on",
+        "eventHandlerPropPrefix": "on"
+      }
+    ],
+    "react/no-danger": "error",
+    "react/no-direct-mutation-state": "error",
+    "react/no-find-dom-node": "off",
+    "react/no-multi-comp": "off",
+    "react/require-default-props": "off",
+    "react/sort-prop-types": "error",
+
+    "import/no-extraneous-dependencies": "off",
+    "import/namespace": ["error", { "allowComputed": true }],
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          ["index", "sibling", "parent", "internal", "external", "builtin"]
+        ],
+        "newlines-between": "never"
+      }
+    ],
+
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "error",
+    "no-shadow": [1]
   }
 }

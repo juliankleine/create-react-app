@@ -5,14 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-var fs = require('fs');
-var path = require('path');
-var chalk = require('chalk');
+const fs = require('fs');
+const path = require('path');
+const chalk = require('chalk');
 
 function checkRequiredFiles(files) {
-  var currentFilePath;
+  let currentFilePath;
   try {
     files.forEach(filePath => {
       currentFilePath = filePath;
@@ -20,8 +18,8 @@ function checkRequiredFiles(files) {
     });
     return true;
   } catch (err) {
-    var dirName = path.dirname(currentFilePath);
-    var fileName = path.basename(currentFilePath);
+    const dirName = path.dirname(currentFilePath);
+    const fileName = path.basename(currentFilePath);
     console.log(chalk.red('Could not find a required file.'));
     console.log(chalk.red('  Name: ') + chalk.cyan(fileName));
     console.log(chalk.red('  Searched in: ') + chalk.cyan(dirName));

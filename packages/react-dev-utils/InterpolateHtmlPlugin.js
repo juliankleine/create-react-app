@@ -13,7 +13,6 @@
 // Learn more about creating plugins like this:
 // https://github.com/ampedandwired/html-webpack-plugin#events
 
-'use strict';
 const escapeStringRegexp = require('escape-string-regexp');
 
 class InterpolateHtmlPlugin {
@@ -31,7 +30,7 @@ class InterpolateHtmlPlugin {
           Object.keys(this.replacements).forEach(key => {
             const value = this.replacements[key];
             data.html = data.html.replace(
-              new RegExp('%' + escapeStringRegexp(key) + '%', 'g'),
+              new RegExp(`%${escapeStringRegexp(key)}%`, 'g'),
               value
             );
           });

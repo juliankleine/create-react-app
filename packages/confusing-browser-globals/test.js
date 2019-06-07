@@ -7,9 +7,7 @@
 
 /* eslint-env jest */
 
-'use strict';
-
-let globals = require('./index');
+const globals = require('./index');
 
 it('should return an Array of globals', () => {
   expect(Array.isArray(globals)).toBe(true);

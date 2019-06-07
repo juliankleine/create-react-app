@@ -4,7 +4,6 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-'use strict';
 
 const address = require('address');
 const fs = require('fs');
@@ -39,7 +38,9 @@ function prepareUrls(protocol, host, port) {
     });
 
   const isUnspecifiedHost = host === '0.0.0.0' || host === '::';
-  let prettyHost, lanUrlForConfig, lanUrlForTerminal;
+  let prettyHost;
+  let lanUrlForConfig;
+  let lanUrlForTerminal;
   if (isUnspecifiedHost) {
     prettyHost = 'localhost';
     try {
@@ -230,14 +231,14 @@ function createCompiler({
 
       // Teach some ESLint tricks.
       console.log(
-        '\nSearch for the ' +
-          chalk.underline(chalk.yellow('keywords')) +
-          ' to learn more about each warning.'
+        `\nSearch for the ${chalk.underline(
+          chalk.yellow('keywords')
+        )} to learn more about each warning.`
       );
       console.log(
-        'To ignore, add ' +
-          chalk.cyan('// eslint-disable-next-line') +
-          ' to the line before.\n'
+        `To ignore, add ${chalk.cyan(
+          '// eslint-disable-next-line'
+        )} to the line before.\n`
       );
     }
   });
@@ -275,11 +276,11 @@ function resolveLoopback(proxy) {
   // This means even though localhost resolves to ::1, the application
   // must fall back to IPv4 (on 127.0.0.1).
   // We can re-enable this in a few years.
-  /*try {
+  /* try {
     o.hostname = address.ipv6() ? '::1' : '127.0.0.1';
   } catch (_ignored) {
     o.hostname = '127.0.0.1';
-  }*/
+  } */
 
   try {
     // Check if we're on a network; if we are, chances are we can resolve
@@ -300,19 +301,14 @@ function onProxyError(proxy) {
   return (err, req, res) => {
     const host = req.headers && req.headers.host;
     console.log(
-      chalk.red('Proxy error:') +
-        ' Could not proxy request ' +
-        chalk.cyan(req.url) +
-        ' from ' +
-        chalk.cyan(host) +
-        ' to ' +
-        chalk.cyan(proxy) +
-        '.'
+      `${chalk.red('Proxy error:')} Could not proxy request ${chalk.cyan(
+        req.url
+      )} from ${chalk.cyan(host)} to ${chalk.cyan(proxy)}.`
     );
     console.log(
-      'See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (' +
-        chalk.cyan(err.code) +
-        ').'
+      `See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (${chalk.cyan(
+        err.code
+      )}).`
     );
     console.log();
 
@@ -322,15 +318,9 @@ function onProxyError(proxy) {
       res.writeHead(500);
     }
     res.end(
-      'Proxy error: Could not proxy request ' +
-        req.url +
-        ' from ' +
-        host +
-        ' to ' +
-        proxy +
-        ' (' +
-        err.code +
-        ').'
+      `Proxy error: Could not proxy request ${
+        req.url
+      } from ${host} to ${proxy} (${err.code}).`
     );
   };
 }
@@ -345,7 +335,7 @@ function prepareProxy(proxy, appPublicFolder) {
       chalk.red('When specified, "proxy" in package.json must be a string.')
     );
     console.log(
-      chalk.red('Instead, the type of "proxy" was "' + typeof proxy + '".')
+      chalk.red(`Instead, the type of "proxy" was "${typeof proxy}".`)
     );
     console.log(
       chalk.red('Either remove "proxy" from package.json, or make it a string.')
@@ -388,7 +378,7 @@ function prepareProxy(proxy, appPublicFolder) {
       // Modern browsers include text/html into `accept` header when navigating.
       // However API calls like `fetch()` won’t generally accept text/html.
       // If this heuristic doesn’t work well for you, use `src/setupProxy.js`.
-      context: function(pathname, req) {
+      context(pathname, req) {
         return (
           req.method !== 'GET' ||
           (mayProxy(pathname) &&
@@ -422,7 +412,7 @@ function choosePort(host, defaultPort) {
         }
         const message =
           process.platform !== 'win32' && defaultPort < 1024 && !isRoot()
-            ? `Admin permissions are required to run a server on a port below 1024.`
+            ? 'Admin permissions are required to run a server on a port below 1024.'
             : `Something is already running on port ${defaultPort}.`;
         if (isInteractive) {
           clearConsole();
@@ -430,11 +420,11 @@ function choosePort(host, defaultPort) {
           const question = {
             type: 'confirm',
             name: 'shouldChangePort',
-            message:
-              chalk.yellow(
-                message +
-                  `${existingProcess ? ` Probably:\n  ${existingProcess}` : ''}`
-              ) + '\n\nWould you like to run the app on another port instead?',
+            message: `${chalk.yellow(
+              `${message}${
+                existingProcess ? ` Probably:\n  ${existingProcess}` : ''
+              }`
+            )}\n\nWould you like to run the app on another port instead?`,
             default: true,
           };
           inquirer.prompt(question).then(answer => {
@@ -451,10 +441,9 @@ function choosePort(host, defaultPort) {
       }),
     err => {
       throw new Error(
-        chalk.red(`Could not find an open port at ${chalk.bold(host)}.`) +
-          '\n' +
-          ('Network error message: ' + err.message || err) +
-          '\n'
+        `${chalk.red(
+          `Could not find an open port at ${chalk.bold(host)}.`
+        )}\n${`Network error message: ${err.message}` || err}\n`
       );
     }
   );

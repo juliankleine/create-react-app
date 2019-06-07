@@ -5,8 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
 const chalk = require('chalk');
 const findUp = require('find-up');
 const path = require('path');
@@ -34,13 +32,13 @@ class ModuleNotFoundPlugin {
     if (file.startsWith('..')) {
       file = _file;
     } else if (!file.startsWith('.')) {
-      file = '.' + path.sep + file;
+      file = `.${path.sep}${file}`;
     }
     return file;
   }
 
   prettierError(err) {
-    let { details: _details = '', origin } = err;
+    const { details: _details = '', origin } = err;
 
     if (origin == null) {
       const caseSensitivity =
@@ -72,11 +70,11 @@ class ModuleNotFoundPlugin {
         details = [
           `Cannot find module: '${target}'. Make sure this package is installed.`,
           '',
-          'You can install this package by running: ' +
-            (isYarn
+          `You can install this package by running: ${
+            isYarn
               ? chalk.bold(`yarn add ${target}`)
-              : chalk.bold(`npm install ${target}`)) +
-            '.',
+              : chalk.bold(`npm install ${target}`)
+          }.`,
         ];
       } else if (isFile) {
         details = [`Cannot find file '${target}' in '${context}'.`];

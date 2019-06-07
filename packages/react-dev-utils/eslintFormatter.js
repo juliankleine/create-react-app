@@ -5,8 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
 const chalk = require('chalk');
 const stripAnsi = require('strip-ansi');
 const table = require('text-table');
@@ -24,7 +22,7 @@ function formatter(results) {
   let reportContainsErrorRuleIDs = false;
 
   results.forEach(result => {
-    let messages = result.messages;
+    let { messages } = result;
     if (messages.length === 0) {
       return;
     }
@@ -43,9 +41,9 @@ function formatter(results) {
 
       let line = message.line || 0;
       if (message.column) {
-        line += ':' + message.column;
+        line += `:${message.column}`;
       }
-      let position = chalk.bold('Line ' + line + ':');
+      const position = chalk.bold(`Line ${line}:`);
       return [
         '',
         position,
@@ -66,7 +64,7 @@ function formatter(results) {
       m.splice(2, 1);
     });
 
-    let outputTable = table(messages, {
+    const outputTable = table(messages, {
       align: ['l', 'l', 'l'],
       stringLength(str) {
         return stripAnsi(str).length;
@@ -84,10 +82,9 @@ function formatter(results) {
     // it here because we always show at most one error, and
     // we can only be sure it's an ESLint error before exiting
     // this function.
-    output +=
-      'Search for the ' +
-      chalk.underline(chalk.red('keywords')) +
-      ' to learn more about each error.';
+    output += `Search for the ${chalk.underline(
+      chalk.red('keywords')
+    )} to learn more about each error.`;
   }
 
   return output;

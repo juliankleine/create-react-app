@@ -5,8 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
 module.exports = function getCacheIdentifier(environment, packages) {
   let cacheIdentifier = environment == null ? '' : environment.toString();
   for (const packageName of packages) {

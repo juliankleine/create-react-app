@@ -5,7 +5,6 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-'use strict';
 
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
@@ -16,7 +15,7 @@ process.on('unhandledRejection', err => {
 
 const fs = require('fs-extra');
 const path = require('path');
-const execSync = require('child_process').execSync;
+const { execSync } = require('child_process');
 const chalk = require('react-dev-utils/chalk');
 const paths = require('../config/paths');
 const createJestConfig = require('./utils/createJestConfig');
@@ -24,12 +23,12 @@ const inquirer = require('react-dev-utils/inquirer');
 const spawnSync = require('react-dev-utils/crossSpawn').sync;
 const os = require('os');
 
-const green = chalk.green;
-const cyan = chalk.cyan;
+const { green } = chalk;
+const { cyan } = chalk;
 
 function getGitStatus() {
   try {
-    let stdout = execSync(`git status --porcelain`, {
+    const stdout = execSync('git status --porcelain', {
       stdio: ['pipe', 'pipe', 'ignore'],
     }).toString();
     return stdout.trim();
@@ -78,26 +77,22 @@ inquirer
     const gitStatus = getGitStatus();
     if (gitStatus) {
       console.error(
-        chalk.red(
+        `${chalk.red(
           'This git repository has untracked files or uncommitted changes:'
-        ) +
-          '\n\n' +
-          gitStatus
-            .split('\n')
-            .map(line => line.match(/ .*/g)[0].trim())
-            .join('\n') +
-          '\n\n' +
-          chalk.red(
-            'Remove untracked files, stash or commit any changes, and try again.'
-          )
+        )}\n\n${gitStatus
+          .split('\n')
+          .map(line => line.match(/ .*/g)[0].trim())
+          .join('\n')}\n\n${chalk.red(
+          'Remove untracked files, stash or commit any changes, and try again.'
+        )}`
       );
       process.exit(1);
     }
 
     console.log('Ejecting...');
 
-    const ownPath = paths.ownPath;
-    const appPath = paths.appPath;
+    const { ownPath } = paths;
+    const { appPath } = paths;
 
     function verifyAbsent(file) {
       if (fs.existsSync(path.join(appPath, file))) {
@@ -114,6 +109,7 @@ inquirer
     const folders = ['config', 'config/jest', 'scripts'];
 
     // Make shallow array of files paths
+    // eslint-disable-next-line no-shadow
     const files = folders.reduce((files, folder) => {
       return files.concat(
         fs
@@ -150,19 +146,18 @@ inquirer
       if (content.match(/\/\/ @remove-file-on-eject/)) {
         return;
       }
-      content =
-        content
-          // Remove dead code from .js files on eject
-          .replace(
-            /\/\/ @remove-on-eject-begin([\s\S]*?)\/\/ @remove-on-eject-end/gm,
-            ''
-          )
-          // Remove dead code from .applescript files on eject
-          .replace(
-            /-- @remove-on-eject-begin([\s\S]*?)-- @remove-on-eject-end/gm,
-            ''
-          )
-          .trim() + '\n';
+      content = `${content
+        // Remove dead code from .js files on eject
+        .replace(
+          /\/\/ @remove-on-eject-begin([\s\S]*?)\/\/ @remove-on-eject-end/gm,
+          ''
+        )
+        // Remove dead code from .applescript files on eject
+        .replace(
+          /-- @remove-on-eject-begin([\s\S]*?)-- @remove-on-eject-end/gm,
+          ''
+        )
+        .trim()}\n`;
       console.log(`  Adding ${cyan(file.replace(ownPath, ''))} to the project`);
       fs.writeFileSync(file.replace(ownPath, appPath), content);
     });
@@ -204,10 +199,10 @@ inquirer
     console.log();
 
     console.log(cyan('Updating the scripts'));
-    delete appPackage.scripts['eject'];
+    delete appPackage.scripts.eject;
     Object.keys(appPackage.scripts).forEach(key => {
       Object.keys(ownPackage.bin).forEach(binKey => {
-        const regex = new RegExp(binKey + ' (\\w+)', 'g');
+        const regex = new RegExp(`${binKey} (\\w+)`, 'g');
         if (!regex.test(appPackage.scripts[key])) {
           return;
         }

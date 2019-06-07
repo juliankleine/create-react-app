@@ -5,15 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-var chalk = require('chalk');
-var execSync = require('child_process').execSync;
-var spawn = require('cross-spawn');
-var opn = require('opn');
+const chalk = require('chalk');
+const { execSync } = require('child_process');
+const spawn = require('cross-spawn');
+const opn = require('opn');
 
 // https://github.com/sindresorhus/opn#app
-var OSX_CHROME = 'google chrome';
+const OSX_CHROME = 'google chrome';
 
 const Actions = Object.freeze({
   NONE: 0,
@@ -53,9 +51,8 @@ function executeNodeScript(scriptPath, url) {
           'The script specified as BROWSER environment variable failed.'
         )
       );
-      console.log(chalk.cyan(scriptPath) + ' exited with code ' + code + '.');
+      console.log(`${chalk.cyan(scriptPath)} exited with code ${code}.`);
       console.log();
-      return;
     }
   });
   return true;
@@ -75,7 +72,7 @@ function startBrowserProcess(browser, url) {
       // Try our best to reuse existing tab
       // on OS X Google Chrome with AppleScript
       execSync('ps cax | grep "Google Chrome"');
-      execSync('osascript openChrome.applescript "' + encodeURI(url) + '"', {
+      execSync(`osascript openChrome.applescript "${encodeURI(url)}"`, {
         cwd: __dirname,
         stdio: 'ignore',
       });
@@ -96,7 +93,7 @@ function startBrowserProcess(browser, url) {
   // Fallback to opn
   // (It will always open new tab)
   try {
-    var options = { app: browser, wait: false };
+    const options = { app: browser, wait: false };
     opn(url, options).catch(() => {}); // Prevent `unhandledRejection` error.
     return true;
   } catch (err) {

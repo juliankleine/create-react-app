@@ -6,8 +6,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
 const chalk = require('react-dev-utils/chalk');
 const fs = require('fs');
 const resolve = require('resolve');
@@ -75,16 +73,16 @@ function verifyTypeScriptSetup() {
         'Please install',
         chalk.cyan.bold('typescript'),
         'by running',
-        chalk.cyan.bold(
+        `${chalk.cyan.bold(
           isYarn ? 'yarn add typescript' : 'npm install typescript'
-        ) + '.'
+        )}.`
       )
     );
     console.error(
       chalk.bold(
-        'If you are not trying to use TypeScript, please remove the ' +
-          chalk.cyan('tsconfig.json') +
-          ' file from your package root (and any TypeScript files).'
+        `If you are not trying to use TypeScript, please remove the ${chalk.cyan(
+          'tsconfig.json'
+        )} file from your package root (and any TypeScript files).`
       )
     );
     console.error();
@@ -176,12 +174,12 @@ function verifyTypeScriptSetup() {
       console.error(
         chalk.red.bold(
           'Could not parse',
-          chalk.cyan('tsconfig.json') + '.',
+          `${chalk.cyan('tsconfig.json')}.`,
           'Please make sure it contains syntactically correct JSON.'
         )
       );
     }
-    
+
     console.log(e && e.message ? `${e.message}` : '');
     process.exit(1);
   }
@@ -195,7 +193,7 @@ function verifyTypeScriptSetup() {
     const { parsedValue, value, suggested, reason } = compilerOptions[option];
 
     const valueToCheck = parsedValue === undefined ? value : parsedValue;
-    const coloredOption = chalk.cyan('compilerOptions.' + option);
+    const coloredOption = chalk.cyan(`compilerOptions.${option}`);
 
     if (suggested != null) {
       if (parsedCompilerOptions[option] === undefined) {
@@ -211,8 +209,9 @@ function verifyTypeScriptSetup() {
       messages.push(
         `${coloredOption} ${chalk.bold(
           valueToCheck == null ? 'must not' : 'must'
-        )} be ${valueToCheck == null ? 'set' : chalk.cyan.bold(value)}` +
-          (reason != null ? ` (${reason})` : '')
+        )} be ${valueToCheck == null ? 'set' : chalk.cyan.bold(value)}${
+          reason != null ? ` (${reason})` : ''
+        }`
       );
     }
   }
@@ -244,7 +243,7 @@ function verifyTypeScriptSetup() {
         )
       );
       messages.forEach(message => {
-        console.warn('  - ' + message);
+        console.warn(`  - ${message}`);
       });
       console.warn();
     }

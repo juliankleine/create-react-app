@@ -5,8 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
 class InlineChunkHtmlPlugin {
   constructor(htmlWebpackPlugin, tests) {
     this.htmlWebpackPlugin = htmlWebpackPlugin;
@@ -17,7 +15,9 @@ class InlineChunkHtmlPlugin {
     if (tag.tagName !== 'script' || !(tag.attributes && tag.attributes.src)) {
       return tag;
     }
-    const scriptName = publicPath ? tag.attributes.src.replace(publicPath, '') : tag.attributes.src;
+    const scriptName = publicPath
+      ? tag.attributes.src.replace(publicPath, '')
+      : tag.attributes.src;
     if (!this.tests.some(test => scriptName.match(test))) {
       return tag;
     }

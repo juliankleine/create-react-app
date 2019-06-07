@@ -6,8 +6,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
 // terminate the Node.js process with a non-zero exit code.
@@ -16,6 +14,7 @@ process.on('unhandledRejection', err => {
 });
 
 const spawn = require('react-dev-utils/crossSpawn');
+
 const args = process.argv.slice(2);
 
 const scriptIndex = args.findIndex(
@@ -34,7 +33,7 @@ switch (script) {
     const result = spawn.sync(
       'node',
       nodeArgs
-        .concat(require.resolve('../scripts/' + script))
+        .concat(require.resolve(`../scripts/${script}`))
         .concat(args.slice(scriptIndex + 1)),
       { stdio: 'inherit' }
     );
@@ -58,7 +57,7 @@ switch (script) {
     break;
   }
   default:
-    console.log('Unknown script "' + script + '".');
+    console.log(`Unknown script "${script}".`);
     console.log('Perhaps you need to update react-scripts?');
     console.log(
       'See: https://facebook.github.io/create-react-app/docs/updating-to-new-releases'

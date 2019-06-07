@@ -5,8 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
 module.exports = function createNoopServiceWorkerMiddleware() {
   return function noopServiceWorkerMiddleware(req, res, next) {
     if (req.url === '/service-worker.js') {

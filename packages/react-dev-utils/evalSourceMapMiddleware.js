@@ -4,7 +4,6 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-'use strict';
 
 function base64SourceMap(source) {
   const base64 = Buffer.from(JSON.stringify(source.map()), 'utf8').toString(
@@ -28,7 +27,7 @@ function getSourceById(server, id) {
 module.exports = function createEvalSourceMapMiddleware(server) {
   return function handleWebpackInternalMiddleware(req, res, next) {
     if (req.url.startsWith('/__get-internal-source')) {
-      const fileName = req.query.fileName;
+      const { fileName } = req.query;
       const id = fileName.match(/webpack-internal:\/\/\/(.+)/)[1];
       if (!id || !server._stats) {
         next();

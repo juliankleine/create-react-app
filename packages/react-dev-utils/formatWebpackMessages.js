@@ -5,9 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
 const chalk = require('chalk');
+
 const friendlySyntaxErrorLabel = 'Syntax error:';
 
 function isLikelyASyntaxError(message) {
@@ -47,15 +46,15 @@ function formatMessage(message) {
   // Clean up export errors
   message = message.replace(
     /^.*export '(.+?)' was not found in '(.+?)'.*$/gm,
-    `Attempted import error: '$1' is not exported from '$2'.`
+    "Attempted import error: '$1' is not exported from '$2'."
   );
   message = message.replace(
     /^.*export 'default' \(imported as '(.+?)'\) was not found in '(.+?)'.*$/gm,
-    `Attempted import error: '$2' does not contain a default export (imported as '$1').`
+    "Attempted import error: '$2' does not contain a default export (imported as '$1')."
   );
   message = message.replace(
     /^.*export '(.+?)' \(imported as '(.+?)'\) was not found in '(.+?)'.*$/gm,
-    `Attempted import error: '$1' is not exported from '$3' (imported as '$2').`
+    "Attempted import error: '$1' is not exported from '$3' (imported as '$2')."
   );
   lines = message.split('\n');
 
@@ -109,10 +108,10 @@ function formatMessage(message) {
 }
 
 function formatWebpackMessages(json) {
-  const formattedErrors = json.errors.map(function(message) {
+  const formattedErrors = json.errors.map(message => {
     return formatMessage(message, true);
   });
-  const formattedWarnings = json.warnings.map(function(message) {
+  const formattedWarnings = json.warnings.map(message => {
     return formatMessage(message, false);
   });
   const result = { errors: formattedErrors, warnings: formattedWarnings };

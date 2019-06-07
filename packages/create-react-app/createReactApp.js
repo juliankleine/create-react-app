@@ -32,13 +32,11 @@
 //   /!\ DO NOT MODIFY THIS FILE /!\
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-'use strict';
-
 const chalk = require('chalk');
 const commander = require('commander');
 const dns = require('dns');
 const envinfo = require('envinfo');
-const execSync = require('child_process').execSync;
+const { execSync } = require('child_process');
 const fs = require('fs-extra');
 const hyperquest = require('hyperquest');
 const inquirer = require('inquirer');
@@ -47,10 +45,9 @@ const path = require('path');
 const semver = require('semver');
 const spawn = require('cross-spawn');
 const tmp = require('tmp');
-const unpack = require('tar-pack').unpack;
+const { unpack } = require('tar-pack');
 const url = require('url');
 const validateProjectName = require('validate-npm-package-name');
-
 const packageJson = require('./package.json');
 
 // These files should be allowed to remain on a failed install,
@@ -109,11 +106,11 @@ const program = new commander.Command(packageJson.name)
       )}`
     );
     console.log(
-      `    It is not needed unless you specifically want to use a fork.`
+      '    It is not needed unless you specifically want to use a fork.'
     );
     console.log();
     console.log(
-      `    If you have any problems, do not hesitate to file an issue:`
+      '    If you have any problems, do not hesitate to file an issue:'
     );
     console.log(
       `      ${chalk.cyan(
@@ -228,7 +225,7 @@ function createApp(
         `You are using Node ${
           process.version
         } so the project will be bootstrapped with an old unsupported version of tools.\n\n` +
-          `Please update to Node 8.10 or higher for a better, fully supported experience.\n`
+          'Please update to Node 8.10 or higher for a better, fully supported experience.\n'
       )
     );
     // Fall back to latest supported react-scripts on Node 4
@@ -244,7 +241,7 @@ function createApp(
             `You are using npm ${
               npmInfo.npmVersion
             } so the project will be bootstrapped with an old unsupported version of tools.\n\n` +
-              `Please update to npm 5 or higher for a better, fully supported experience.\n`
+              'Please update to npm 5 or higher for a better, fully supported experience.\n'
           )
         );
       }
@@ -260,7 +257,7 @@ function createApp(
             `You are using Yarn ${
               yarnInfo.yarnVersion
             } together with the --use-pnp flag, but Plug'n'Play is only supported starting from the 1.12 release.\n\n` +
-              `Please update to Yarn 1.12 or higher for a better, fully supported experience.\n`
+              'Please update to Yarn 1.12 or higher for a better, fully supported experience.\n'
           )
         );
       }
@@ -400,13 +397,13 @@ function run(
     getPackageName(packageToInstall)
       .then(packageName =>
         checkIfOnline(useYarn).then(isOnline => ({
-          isOnline: isOnline,
-          packageName: packageName,
+          isOnline,
+          packageName,
         }))
       )
       .then(info => {
-        const isOnline = info.isOnline;
-        const packageName = info.packageName;
+        const { isOnline } = info;
+        const { packageName } = info;
         console.log(
           `Installing ${chalk.cyan('react')}, ${chalk.cyan(
             'react-dom'
@@ -446,8 +443,8 @@ function run(
         if (version === 'react-scripts@0.9.x') {
           console.log(
             chalk.yellow(
-              `\nNote: the project was bootstrapped with an old unsupported version of tools.\n` +
-                `Please update to Node >=8.10 and npm >=5 to get supported tools in new projects.\n`
+              '\nNote: the project was bootstrapped with an old unsupported version of tools.\n' +
+                'Please update to Node >=8.10 and npm >=5 to get supported tools in new projects.\n'
             )
           );
         }
@@ -557,7 +554,7 @@ function getTemporaryDirectory() {
         reject(err);
       } else {
         resolve({
-          tmpdir: tmpdir,
+          tmpdir,
           cleanup: () => {
             try {
               callback();
@@ -620,17 +617,20 @@ function getPackageName(installPackage) {
         );
         return Promise.resolve(assumedProjectName);
       });
-  } else if (installPackage.indexOf('git+') === 0) {
+  }
+  if (installPackage.indexOf('git+') === 0) {
     // Pull package name out of git urls e.g:
     // git+https://github.com/mycompany/react-scripts.git
     // git+ssh://github.com/mycompany/react-scripts.git#v1.2.3
     return Promise.resolve(installPackage.match(/([^/]+)\.git(#.*)?$/)[1]);
-  } else if (installPackage.match(/.+@/)) {
+  }
+  if (installPackage.match(/.+@/)) {
     // Do not match @scope/ when stripping off @version or @tag
     return Promise.resolve(
       installPackage.charAt(0) + installPackage.substr(1).split('@')[0]
     );
-  } else if (installPackage.match(/^file:/)) {
+  }
+  if (installPackage.match(/^file:/)) {
     const installPackagePath = installPackage.match(/^file:(.*)?$/)[1];
     const installPackageJson = require(path.join(
       installPackagePath,
@@ -653,8 +653,8 @@ function checkNpmVersion() {
     // ignore
   }
   return {
-    hasMinNpm: hasMinNpm,
-    npmVersion: npmVersion,
+    hasMinNpm,
+    npmVersion,
   };
 }
 
@@ -674,8 +674,8 @@ function checkYarnVersion() {
     // ignore
   }
   return {
-    hasMinYarnPnp: hasMinYarnPnp,
-    yarnVersion: yarnVersion,
+    hasMinYarnPnp,
+    yarnVersion,
   };
 }
 
@@ -731,7 +731,7 @@ function checkAppName(appName) {
         `We cannot create a project called ${chalk.green(
           appName
         )} because a dependency with the same name exists.\n` +
-          `Due to the way npm works, the following names are not allowed:\n\n`
+          'Due to the way npm works, the following names are not allowed:\n\n'
       ) +
         chalk.cyan(dependencies.map(depName => `  ${depName}`).join('\n')) +
         chalk.red('\n\nPlease choose a different project name.')
@@ -851,17 +851,14 @@ function isSafeToCreateProjectIn(root, name) {
 function getProxy() {
   if (process.env.https_proxy) {
     return process.env.https_proxy;
-  } else {
-    try {
-      // Trying to read https-proxy from .npmrc
-      let httpsProxy = execSync('npm config get https-proxy')
-        .toString()
-        .trim();
-      return httpsProxy !== 'null' ? httpsProxy : undefined;
-    } catch (e) {
-      return;
-    }
   }
+  try {
+    // Trying to read https-proxy from .npmrc
+    const httpsProxy = execSync('npm config get https-proxy')
+      .toString()
+      .trim();
+    return httpsProxy !== 'null' ? httpsProxy : undefined;
+  } catch (e) {}
 }
 function checkThatNpmCanReadCwd() {
   const cwd = process.cwd();
@@ -898,27 +895,28 @@ function checkThatNpmCanReadCwd() {
   }
   console.error(
     chalk.red(
-      `Could not start an npm process in the right directory.\n\n` +
+      'Could not start an npm process in the right directory.\n\n' +
         `The current directory is: ${chalk.bold(cwd)}\n` +
         `However, a newly started npm process runs in: ${chalk.bold(
           npmCWD
         )}\n\n` +
-        `This is probably caused by a misconfigured system terminal shell.`
+        'This is probably caused by a misconfigured system terminal shell.'
     )
   );
   if (process.platform === 'win32') {
     console.error(
-      chalk.red(`On Windows, this can usually be fixed by running:\n\n`) +
+      `${chalk.red(
+        'On Windows, this can usually be fixed by running:\n\n'
+      )}  ${chalk.cyan(
+        'reg'
+      )} delete "HKCU\\Software\\Microsoft\\Command Processor" /v AutoRun /f\n` +
         `  ${chalk.cyan(
           'reg'
-        )} delete "HKCU\\Software\\Microsoft\\Command Processor" /v AutoRun /f\n` +
-        `  ${chalk.cyan(
-          'reg'
-        )} delete "HKLM\\Software\\Microsoft\\Command Processor" /v AutoRun /f\n\n` +
-        chalk.red(`Try to run the above two lines in the terminal.\n`) +
-        chalk.red(
-          `To learn more about this problem, read: https://blogs.msdn.microsoft.com/oldnewthing/20071121-00/?p=24433/`
-        )
+        )} delete "HKLM\\Software\\Microsoft\\Command Processor" /v AutoRun /f\n\n${chalk.red(
+          'Try to run the above two lines in the terminal.\n'
+        )}${chalk.red(
+          'To learn more about this problem, read: https://blogs.msdn.microsoft.com/oldnewthing/20071121-00/?p=24433/'
+        )}`
     );
   }
   return false;
